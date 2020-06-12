@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.exc import NoResultFound
 
 from src.controllers.clipboard_controller import \
     ClipboardController as Controller
@@ -22,10 +23,23 @@ class TestClipboardController(TestCase):
 
         clipboards = self.session.query(Clipboard).all()
 
-    
         for i in range(len(clipboards)):
             with self.subTest(i=i):
                 self.assertIn(clipboard.clipboard, clipboards[i].clipboard)
+
+    def test_se_find_funciona(self):
+        clipboard = Clipboard(clipboard='find me')
+        self.session.add(clipboard)
+        self.session.commit()
+
+        obtained = self.controller.show(1)
+
+        self.assertEqual(clipboard.id, obtained.id)
+
+    def test_se_find_nao_encontra_o_registro(self):
+
+        self.assertRaises(NoResultFound,
+                          self.controller.show, 0)
 
     def tearDown(self):
         Base.metadata.drop_all(self.engine)
