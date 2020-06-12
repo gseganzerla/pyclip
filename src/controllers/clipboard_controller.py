@@ -20,3 +20,8 @@ class ClipboardController(object):
         
         elif clipboard is None:
             raise NoResultFound
+
+    def destroy(self, id_: int):
+        clipboard = self.show(id_)
+        self.sql.handler.delete(clipboard)
+        self.sql.handler.commit()

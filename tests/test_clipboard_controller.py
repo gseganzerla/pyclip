@@ -41,6 +41,27 @@ class TestClipboardController(TestCase):
         self.assertRaises(NoResultFound,
                           self.controller.show, 0)
 
+    def test_se_destroy_funciona(self):
+        expected = 0
+
+        clipboard = Clipboard(clipboard='delete me')
+        self.session.add(clipboard)
+        self.session.commit()
+
+
+        self.controller.destroy(1)
+
+        obtained =  self.session.query(Clipboard).filter_by(id=1).count()
+
+        self.assertEqual(expected, obtained)
+
+    def test_se_destroy_nao_encontra_o_registro(self):
+
+        self.assertRaises(NoResultFound,
+                          self.controller.destroy, 0)
+
+
+
     def tearDown(self):
         Base.metadata.drop_all(self.engine)
         self.session.close()
