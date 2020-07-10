@@ -9,6 +9,8 @@ autopep8 = "*"
 
 [packages]
 sqlalchemy = "*"
+python-dotenv = "*"
+pyyaml = "*"
 
 [requires]
 python_version = "3.8"
